@@ -1,5 +1,8 @@
 package com.akvelon.reactnativesmsuserconsent;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+
 import android.app.Activity;
 import android.content.IntentFilter;
 
@@ -13,6 +16,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.android.gms.auth.api.phone.SmsRetriever;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +42,15 @@ public class ReactNativeSmsUserConsentModule extends ReactContextBaseJavaModule 
             throw new RNSmsUserConsentException(
                     Errors.NULL_ACTIVITY,
                     "Could not subscribe, activity is null"
+            );
+        }
+
+        try {
+            ApplicationInfo gmsInfo = reactContext.getPackageManager().getApplicationInfo(GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE, 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RNSmsUserConsentException(
+                    Errors.NULL_BROADCAST_RECEIVER,
+                    "GMS NOT FOUND"
             );
         }
 
